@@ -24,7 +24,11 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import {RouteNames} from '../../constants/strings';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
+import {MainStackParamList} from '../navigations/MainStack';
 
 // If we need to add extra functions/hooks eg. translation, move it inside component
 const formSchema = yup.object({
@@ -37,9 +41,7 @@ const formSchema = yup.object({
 });
 type CustomerFormValues = yup.InferType<typeof formSchema>;
 
-type Props = {
-  route: RouteProp<{params?: {customer?: Customer}}>;
-};
+type Props = NativeStackScreenProps<MainStackParamList, 'AddOrEditCustomer'>;
 
 const AddOrEditCustomer = (props: Props) => {
   const customer = props.route?.params?.customer;
@@ -48,7 +50,8 @@ const AddOrEditCustomer = (props: Props) => {
     (state: RootState) => state.customer,
   );
   const dispatch = useDispatch<AppDispatch>();
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
   const STATUS_OPTIONS = [
     {value: 'active', label: 'Active'},
@@ -76,7 +79,7 @@ const AddOrEditCustomer = (props: Props) => {
     if (customer) {
       await dispatch(
         updateCustomer({
-          customerDto: {...values, id: customer.id},
+          updatedCustomer: {...values, id: customer.id},
         }),
       );
     } else {
@@ -86,7 +89,7 @@ const AddOrEditCustomer = (props: Props) => {
         }),
       );
     }
-    navigation.navigate(RouteNames.Home.value);
+    navigation.navigate('Home');
   };
 
   return (
@@ -98,7 +101,7 @@ const AddOrEditCustomer = (props: Props) => {
             CommonStyles.smallMarginBottom,
             {fontWeight: FontWeights.bold},
           ]}>
-          Add or Edit Customers
+          Add or Edit customers
         </Text>
         <Text>
           Please make sure to fill all required fields before adding customer

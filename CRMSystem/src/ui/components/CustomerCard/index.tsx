@@ -36,11 +36,10 @@ const CustomerCard = (props: Props) => {
     useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const dispatch = useDispatch<AppDispatch>();
   const {deleting} = useSelector((state: RootState) => state.customer);
-  console.log({deleting});
 
   return (
     <Button
-      onPress={() => navigation.navigate('SalesOpportunity', {customer})}
+      onPress={() => navigation.navigate('SalesOpportunities', {customer})}
       style={[
         {backgroundColor: CommonColors.gray},
         CommonStyles.normalPadding,
